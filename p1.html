@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#292b30">
+  <title>Un detalle para vos</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color-scheme: light;
+    }
+
+    body {
+      margin: 0;
+      background: #292b30;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    /* PANTALLA DE ACCESO */
+
+    .access {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      color: #f3f3f4;
+      background:
+        radial-gradient(ellipse at 15% 10%, #565961 0, transparent 55%),
+        linear-gradient(145deg, #36383e, #191a1e);
+    }
+
+    .login {
+      width: min(100%, 380px);
+      padding: 36px 28px;
+      border: 1px solid #ffffff20;
+      border-radius: 24px;
+      background: #ffffff08;
+      box-shadow: 0 24px 80px #00000030;
+      backdrop-filter: blur(18px);
+    }
+
+    .login h1 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -1px;
+    }
+
+    .login p {
+      margin: 0 0 30px;
+      color: #bfc1c8;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .login label {
+      display: block;
+      margin: 18px 0 8px;
+      color: #dedfe3;
+      font-size: 13px;
+    }
+
+    .login input {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      border: 1px solid #ffffff25;
+      border-radius: 11px;
+      outline: none;
+      color: white;
+      background: #00000020;
+      font-size: 16px;
+    }
+
+    .login input:focus {
+      border-color: #c6c9d3;
+      box-shadow: 0 0 0 3px #ffffff12;
+    }
+
+    .enter {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 26px;
+      border: 0;
+      border-radius: 11px;
+      color: #24262b;
+      background: #eeeeef;
+      font-weight: 600;
+      transition: background .2s, transform .2s;
+    }
+
+    .enter:hover {
+      background: white;
+      transform: translateY(-2px);
+    }
+
+    .login .error {
+      min-height: 22px;
+      margin: 14px 0 0;
+      color: #ffc0c0;
+      font-size: 13px;
+    }
+
+
+    .spring {
+      position: relative;
+      isolation: isolate;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100svh;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 50% 8%, #fffce6 0, transparent 52%),
+        linear-gradient(#fff3c8 0%, #fae5a5 55%, #d8dda0 100%);
+      animation: reveal 1.3s ease both;
+    }
+
+    .spring::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: -230px;
+      right: -180px;
+      width: 620px;
+      height: 620px;
+      border-radius: 50%;
+      background: #fffdf280;
+      filter: blur(55px);
+      pointer-events: none;
+    }
+
+    .message {
+      z-index: 3;
+      width: min(94%, 900px);
+      padding: 90px 16px 12px;
+      text-align: center;
+      animation: rise 1.5s .15s both;
+    }
+
+    .eyebrow {
+      margin: 0 0 20px;
+      color: #80703b;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+    }
+
+    .message h1 {
+      margin: 0;
+      outline: none;
+      color: #675021;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(46px, 8vw, 96px);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -3px;
+      text-wrap: balance;
+    }
+
+    .name {
+      display: block;
+      margin-top: 18px;
+      color: #a57117;
+      font-style: italic;
+      font-size: .65em;
+      letter-spacing: -1px;
+    }
+
+    .dedication {
+      max-width: 450px;
+      margin: 25px auto 0;
+      color: #7d6a40;
+      font-size: clamp(15px, 2vw, 18px);
+      line-height: 1.8;
+      text-wrap: balance;
+    }
+
+    .signature {
+      margin: 15px 0 0;
+      color: #9c823e;
+      font-family: Georgia, serif;
+      font-size: 21px;
+      font-style: italic;
+    }
+
+    /* Jardin */
+
+    .garden {
+      position: relative;
+      width: min(1100px, 100%);
+      height: clamp(310px, 45svh, 520px);
+      margin-top: auto;
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+
+    .garden::after {
+      content: "";
+      position: absolute;
+      z-index: 5;
+      right: -25%;
+      bottom: -95px;
+      left: -25%;
+      height: 150px;
+      border-radius: 50%;
+      background: #718440;
+      filter: blur(18px);
+      opacity: .45;
+    }
+
+    .plant {
+      position: absolute;
+      bottom: -12px;
+      left: var(--x);
+      width: var(--width);
+      height: var(--height);
+      transform: translateX(-50%);
+      transform-origin: bottom center;
+      animation: grow 1.4s var(--delay) cubic-bezier(.2, .7, .2, 1) both;
+    }
+
+    .plant svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      transform-origin: 50% 100%;
+      animation: sway var(--speed) ease-in-out infinite alternate;
+      animation-delay: var(--wind-delay);
+      filter: drop-shadow(0 8px 7px #80652012);
+    }
+
+    /* petalos y particula */
+
+    .particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .petal {
+      position: absolute;
+      top: -40px;
+      left: var(--left);
+      width: var(--size);
+      height: calc(var(--size) * .55);
+      border-radius: 80% 10% 80% 10%;
+      background: #efbd36;
+      opacity: 0;
+      animation: fall var(--duration) linear infinite;
+      animation-delay: var(--delay);
+    }
+
+    .music {
+      position: fixed;
+      right: max(18px, env(safe-area-inset-right));
+      bottom: max(18px, env(safe-area-inset-bottom));
+      z-index: 10;
+      min-height: 46px;
+      padding: 12px 18px;
+      border: 1px solid #ffffff90;
+      border-radius: 30px;
+      color: #655424;
+      background: #fff9e5e8;
+      box-shadow: 0 5px 25px #58481b18;
+      backdrop-filter: blur(12px);
+      font-size: 13px;
+    }
+
+    button:focus-visible {
+      outline: 3px solid #9e791b;
+      outline-offset: 4px;
+    }
+
+    .audio-status {
+      position: fixed;
+      right: 20px;
+      bottom: 78px;
+      z-index: 10;
+      max-width: min(300px, calc(100vw - 40px));
+      padding: 10px 14px;
+      border-radius: 12px;
+      color: #655424;
+      background: #fff9e5;
+      font-size: 13px;
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes grow {
+      from { opacity: 0; transform: translateX(-50%) translateY(100px) scale(.65); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+    }
+
+    @keyframes sway {
+      from { transform: rotate(-3deg); }
+      to { transform: rotate(3deg); }
+    }
+
+    @keyframes fall {
+      0% { opacity: 0; transform: translate3d(0, -30px, 0) rotate(0); }
+      10% { opacity: .65; }
+      90% { opacity: .5; }
+      100% { opacity: 0; transform: translate3d(110px, 110svh, 0) rotate(540deg); }
+    }
+
+    @media (max-width: 600px) {
+      .message {
+        padding-top: 65px;
+      }
+
+      .eyebrow {
+        font-size: 9px;
+        letter-spacing: 3px;
+      }
+
+      .message h1 {
+        font-size: clamp(45px, 12vw, 70px);
+        letter-spacing: -2px;
+      }
+
+      .dedication {
+        max-width: 300px;
+        margin-top: 20px;
+      }
+
+      .garden {
+        width: 135%;
+        height: 370px;
+        margin-top: 12px;
+      }
+
+      .music {
+        padding: 11px 15px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-height: 500px) and (orientation: landscape) {
+      .message {
+        padding-top: 35px;
+      }
+
+      .message h1 {
+        font-size: 48px;
+      }
+
+      .garden {
+        height: 280px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .petal {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="access" id="access">
+    <form class="login" id="loginForm">
+      <h1>Bienvenida</h1>
+      <p>Ingresá tus datos para continuar.</p>
+
+      <label for="username">Usuario</label>
+      <input
+        id="username"
+        name="username"
+        type="text"
+        autocomplete="username"
+        autocapitalize="none"
+        spellcheck="false"
+        required
+      >
+
+      <label for="password">Contraseña</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        autocomplete="current-password"
+        required
+      >
+
+      <button class="enter" type="submit">Entrar</button>
+      <p class="error" id="loginError" role="alert"></p>
+    </form>
+  </section>
+
+  <main class="spring" id="spring" hidden>
+    <div class="particles" id="particles" aria-hidden="true"></div>
+
+    <div class="message">
+      <p class="eyebrow">Un pequeño detalle para vos</p>
+
+      <h1 id="greeting" tabindex="-1">
+        ¡Feliz primavera!
+        <span class="name">Paola Solange, amiga mía</span>
+      </h1>
+
+      <p class="dedication">
+        Que nunca te falten motivos para sonreír,
+        sueños por cumplir y flores amarillas en tu vida.
+      </p>
+
+      <p class="signature">Estas son para vos ♡</p>
+    </div>
+
+    <div class="garden" id="garden" aria-hidden="true"></div>
+
+    <button
+      class="music"
+      id="musicButton"
+      type="button"
+      aria-label="Reproducir música"
+    >
+      ♫ Reproducir música
+    </button>
+
+    <p
+      class="audio-status"
+      id="audioStatus"
+      role="status"
+      hidden
+    ></p>
+  </main>
+
+  <audio id="music" preload="none" loop>
+    <source src="./musica.webm" type="audio/mpeg">
+  </audio>
+
+  <script>
+ 
+
+    const USUARIO = "paola";
+    const CONTRASENA = "boluda";
+
+    const access = document.getElementById("access");
+    const spring = document.getElementById("spring");
+    const loginForm = document.getElementById("loginForm");
+    const loginError = document.getElementById("loginError");
+    const garden = document.getElementById("garden");
+    const particles = document.getElementById("particles");
+    const music = document.getElementById("music");
+    const musicButton = document.getElementById("musicButton");
+    const audioStatus = document.getElementById("audioStatus");
+
+    music.volume = 0.65;
+
+    let gardenCreated = false;
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (username !== USUARIO || password !== CONTRASENA) {
+        loginError.textContent = "Usuario o contraseña incorrectos.";
+        document.getElementById("password").focus();
+        return;
+      }
+
+      loginError.textContent = "";
+      access.hidden = true;
+      spring.hidden = false;
+      document.body.style.background = "#fff3c8";
+
+      playMusic();
+
+      if (!gardenCreated) {
+        createGarden();
+        createParticles();
+        gardenCreated = true;
+      }
+
+      document.getElementById("greeting").focus({ preventScroll: true });
+      window.scrollTo(0, 0);
+    });
+
+    loginForm.addEventListener("input", () => {
+      loginError.textContent = "";
+    });
+
+    //audios
+
+    async function playMusic() {
+      audioStatus.hidden = true;
+
+      try {
+        await music.play();
+      } catch (error) {
+        audioStatus.textContent =
+          error.name === "NotAllowedError"
+            ? "Tocá el botón de música para escuchar la canción."
+            : "No se pudo reproducir el audio. Revisá el archivo musica.mp3.";
+
+        audioStatus.hidden = false;
+      }
+
+      updateMusicButton();
+    }
+
+    function updateMusicButton() {
+      const playing = !music.paused;
+
+      musicButton.textContent = playing
+        ? "♫ Pausar música"
+        : "♫ Reproducir música";
+
+      musicButton.setAttribute(
+        "aria-label",
+        playing ? "Pausar música" : "Reproducir música"
+      );
+    }
+
+    musicButton.addEventListener("click", () => {
+      if (music.paused) {
+        playMusic();
+      } else {
+        music.pause();
+      }
+    });
+
+    music.addEventListener("play", updateMusicButton);
+    music.addEventListener("pause", updateMusicButton);
+
+ //svg flor
+
+    function flowerSVG(type, index) {
+      const sunflower = type === "sunflower";
+      const daisy = type === "daisy";
+      const petalCount = sunflower ? 18 : daisy ? 13 : 10;
+      const centerRadius = sunflower ? 27 : daisy ? 15 : 18;
+      const petalLength = sunflower ? 29 : daisy ? 35 : 31;
+      const petalWidth = sunflower ? 10 : daisy ? 8 : 15;
+      const petalDistance = sunflower ? 35 : daisy ? 30 : 28;
+
+      const palettes = {
+        sunflower: ["#ffd74a", "#eeb321"],
+        daisy: ["#fff0a0", "#f4cf4e"],
+        double: ["#ffdf58", "#f2b729"]
+      };
+
+      const [light, dark] = palettes[type];
+      const gradientId = `petal-${index}`;
+
+      let petals = "";
+
+      if (sunflower || type === "double") {
+        for (let i = 0; i < petalCount; i++) {
+          const angle = (360 / petalCount) * i + 360 / petalCount / 2;
+
+          petals += `
+            <ellipse
+              cx="100" cy="${82 - petalDistance + 3}"
+              rx="${petalWidth}" ry="${petalLength}"
+              fill="${dark}"
+              transform="rotate(${angle} 100 82)"
+            />
+          `;
+        }
+      }
+
+      for (let i = 0; i < petalCount; i++) {
+        const angle = (360 / petalCount) * i;
+
+        petals += `
+          <ellipse
+            cx="100" cy="${82 - petalDistance}"
+            rx="${petalWidth}" ry="${petalLength}"
+            fill="url(#${gradientId})"
+            transform="rotate(${angle} 100 82)"
+          />
+        `;
+      }
+
+      let seeds = "";
+
+      if (sunflower) {
+        // Distribución en espiral inspirada en la filotaxis.
+        for (let i = 0; i < 100; i++) {
+          const angle = i * 2.399963;
+          const radius = Math.sqrt(i / 100) * 23;
+          const x = 100 + Math.cos(angle) * radius;
+          const y = 82 + Math.sin(angle) * radius;
+
+          seeds += `
+            <circle
+              cx="${x.toFixed(2)}"
+              cy="${y.toFixed(2)}"
+              r="1.25"
+              fill="${i % 2 ? "#ac792d" : "#dab15a"}"
+              opacity=".8"
+            />
+          `;
+        }
+      } else {
+        for (let i = 0; i < 22; i++) {
+          const angle = i * 2.399963;
+          const radius = Math.sqrt(i / 22) * (centerRadius - 3);
+
+          seeds += `
+            <circle
+              cx="${100 + Math.cos(angle) * radius}"
+              cy="${82 + Math.sin(angle) * radius}"
+              r="1.2"
+              fill="#aa7421"
+              opacity=".5"
+            />
+          `;
+        }
+      }
+
+      return `
+        <svg viewBox="0 0 200 420" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="${gradientId}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${light}" />
+              <stop offset="100%" stop-color="${dark}" />
+            </linearGradient>
+          </defs>
+
+          <path
+            d="M100 425 C88 315 118 208 100 85"
+            fill="none"
+            stroke="#668447"
+            stroke-width="${sunflower ? 7 : 5}"
+            stroke-linecap="round"
+          />
+
+          <path
+            d="M100 285 C52 283 30 249 34 225 C72 226 96 251 100 285Z"
+            fill="#7f9950"
+          />
+          <path
+            d="M101 239 C142 232 171 203 166 177 C126 185 105 209 101 239Z"
+            fill="#91a65b"
+          />
+
+          <path
+            d="M99 285 Q72 258 40 232 M103 238 Q132 211 160 185"
+            fill="none"
+            stroke="#c0cc8220"
+            stroke-width="3"
+          />
+
+          ${petals}
+
+          <circle
+            cx="100" cy="82" r="${centerRadius}"
+            fill="${sunflower ? "#624020" : "#d9a12a"}"
+          />
+
+          <circle
+            cx="100" cy="82" r="${centerRadius - 4}"
+            fill="none"
+            stroke="${sunflower ? "#9a6529" : "#edbd42"}"
+            stroke-width="3"
+          />
+
+          ${seeds}
+        </svg>
+      `;
+    }
+
+    function createGarden() {
+      const flowers = [
+        { x: 7,  h: 69, w: 135, type: "daisy" },
+        { x: 17, h: 86, w: 165, type: "sunflower" },
+        { x: 28, h: 63, w: 135, type: "double" },
+        { x: 36, h: 95, w: 170, type: "sunflower" },
+        { x: 47, h: 74, w: 145, type: "daisy" },
+        { x: 57, h: 100, w: 180, type: "sunflower" },
+        { x: 68, h: 70, w: 145, type: "double" },
+        { x: 78, h: 88, w: 160, type: "daisy" },
+        { x: 90, h: 76, w: 165, type: "sunflower" },
+        { x: 22, h: 48, w: 125, type: "daisy" },
+        { x: 43, h: 53, w: 140, type: "double" },
+        { x: 64, h: 49, w: 130, type: "daisy" },
+        { x: 84, h: 45, w: 125, type: "double" }
+      ];
+
+      flowers.forEach((flower, index) => {
+        const plant = document.createElement("div");
+        plant.className = "plant";
+
+        plant.style.setProperty("--x", `${flower.x}%`);
+        plant.style.setProperty("--height", `${flower.h}%`);
+        plant.style.setProperty("--width", `${flower.w}px`);
+        plant.style.setProperty("--delay", `${index * 0.075}s`);
+        plant.style.setProperty("--speed", `${3 + index % 4}s`);
+        plant.style.setProperty("--wind-delay", `${-index * 0.7}s`);
+        plant.style.zIndex = index >= 9 ? "4" : "1";
+
+        plant.innerHTML = flowerSVG(flower.type, index);
+        garden.appendChild(plant);
+      });
+    }
+
+    function createParticles() {
+      for (let i = 0; i < 18; i++) {
+        const petal = document.createElement("span");
+        petal.className = "petal";
+
+        petal.style.setProperty("--left", `${Math.random() * 100}%`);
+        petal.style.setProperty("--size", `${8 + Math.random() * 10}px`);
+        petal.style.setProperty("--duration", `${12 + Math.random() * 12}s`);
+        petal.style.setProperty("--delay", `${-Math.random() * 24}s`);
+
+        particles.appendChild(petal);
+      }
+    }
+  </script>
+</body>
+</html>
